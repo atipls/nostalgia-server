@@ -1,0 +1,8 @@
+[package]
+name = "types"
+description = "Basic types for Nostalgia Server"
+license.workspace = true
+version.workspace = true
+edition.workspace = true
+
+[dependencies]

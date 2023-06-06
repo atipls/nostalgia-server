@@ -1,0 +1,12 @@
+[package]
+name = "nostalgia_server"
+description = "Nostalgia Server"
+license.workspace = true
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+tokio.workspace = true
+network.workspace = true
+protocol.workspace = true
+types.workspace = true

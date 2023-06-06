@@ -1,0 +1,11 @@
+[package]
+name = "network"
+description = "RakNet Implementation for Nostalgia Server"
+license.workspace = true
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+tokio.workspace = true
+rand.workspace = true
+byteorder.workspace = true

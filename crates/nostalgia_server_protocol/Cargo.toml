@@ -1,0 +1,10 @@
+[package]
+name = "protocol"
+description = "Protocol definitions for Nostalgia Server"
+license.workspace = true
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+byteorder.workspace = true
+types.workspace = true

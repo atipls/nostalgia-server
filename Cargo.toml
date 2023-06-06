@@ -1,0 +1,18 @@
+[workspace]
+members = ["crates/*"]
+resolver = "2"
+
+[workspace.package]
+license = "MIT"
+version = "0.1.0"
+edition = "2021"
+
+
+[workspace.dependencies]
+tokio = { version = "1.28.2", features = ["full"] }
+rand = "0.8.5"
+byteorder = "1.4.3"
+
+network.path = "crates/nostalgia_server_network"
+protocol.path = "crates/nostalgia_server_protocol"
+types.path = "crates/nostalgia_server_types"
