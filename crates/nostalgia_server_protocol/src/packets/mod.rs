@@ -234,3 +234,262 @@ impl Packet {
         }
     }
 }
+
+impl From<LoginRequest> for Packet {
+    fn from(packet: LoginRequest) -> Self {
+        Packet::LoginRequest(packet)
+    }
+}
+
+impl From<LoginResponse> for Packet {
+    fn from(packet: LoginResponse) -> Self {
+        Packet::LoginResponse(packet)
+    }
+}
+
+impl From<Ready> for Packet {
+    fn from(packet: Ready) -> Self {
+        Packet::Ready(packet)
+    }
+}
+
+impl From<Message> for Packet {
+    fn from(packet: Message) -> Self {
+        Packet::Message(packet)
+    }
+}
+
+impl From<SetTime> for Packet {
+    fn from(packet: SetTime) -> Self {
+        Packet::SetTime(packet)
+    }
+}
+
+impl From<StartGame> for Packet {
+    fn from(packet: StartGame) -> Self {
+        Packet::StartGame(packet)
+    }
+}
+
+impl From<AddPlayer> for Packet {
+    fn from(packet: AddPlayer) -> Self {
+        Packet::AddPlayer(packet)
+    }
+}
+
+impl From<RemovePlayer> for Packet {
+    fn from(packet: RemovePlayer) -> Self {
+        Packet::RemovePlayer(packet)
+    }
+}
+
+impl From<AddEntity> for Packet {
+    fn from(packet: AddEntity) -> Self {
+        Packet::AddEntity(packet)
+    }
+}
+
+impl From<RemoveEntity> for Packet {
+    fn from(packet: RemoveEntity) -> Self {
+        Packet::RemoveEntity(packet)
+    }
+}
+
+impl From<TakeItemEntity> for Packet {
+    fn from(packet: TakeItemEntity) -> Self {
+        Packet::TakeItemEntity(packet)
+    }
+}
+
+impl From<MoveEntity> for Packet {
+    fn from(packet: MoveEntity) -> Self {
+        Packet::MoveEntity(packet)
+    }
+}
+
+impl From<MoveEntityPosRot> for Packet {
+    fn from(packet: MoveEntityPosRot) -> Self {
+        Packet::MoveEntityPosRot(packet)
+    }
+}
+
+impl From<RotateHead> for Packet {
+    fn from(packet: RotateHead) -> Self {
+        Packet::RotateHead(packet)
+    }
+}
+
+impl From<MovePlayer> for Packet {
+    fn from(packet: MovePlayer) -> Self {
+        Packet::MovePlayer(packet)
+    }
+}
+
+impl From<PlaceBlock> for Packet {
+    fn from(packet: PlaceBlock) -> Self {
+        Packet::PlaceBlock(packet)
+    }
+}
+
+impl From<RemoveBlock> for Packet {
+    fn from(packet: RemoveBlock) -> Self {
+        Packet::RemoveBlock(packet)
+    }
+}
+
+impl From<UpdateBlock> for Packet {
+    fn from(packet: UpdateBlock) -> Self {
+        Packet::UpdateBlock(packet)
+    }
+}
+
+impl From<AddPainting> for Packet {
+    fn from(packet: AddPainting) -> Self {
+        Packet::AddPainting(packet)
+    }
+}
+
+impl From<Explode> for Packet {
+    fn from(packet: Explode) -> Self {
+        Packet::Explode(packet)
+    }
+}
+
+impl From<LevelEvent> for Packet {
+    fn from(packet: LevelEvent) -> Self {
+        Packet::LevelEvent(packet)
+    }
+}
+
+impl From<TileEvent> for Packet {
+    fn from(packet: TileEvent) -> Self {
+        Packet::TileEvent(packet)
+    }
+}
+
+impl From<EntityEvent> for Packet {
+    fn from(packet: EntityEvent) -> Self {
+        Packet::EntityEvent(packet)
+    }
+}
+
+impl From<RequestChunk> for Packet {
+    fn from(packet: RequestChunk) -> Self {
+        Packet::RequestChunk(packet)
+    }
+}
+
+impl From<PlayerEquipment> for Packet {
+    fn from(packet: PlayerEquipment) -> Self {
+        Packet::PlayerEquipment(packet)
+    }
+}
+
+impl From<PlayerArmorEquipment> for Packet {
+    fn from(packet: PlayerArmorEquipment) -> Self {
+        Packet::PlayerArmorEquipment(packet)
+    }
+}
+
+impl From<Interact> for Packet {
+    fn from(packet: Interact) -> Self {
+        Packet::Interact(packet)
+    }
+}
+
+impl From<UseItem> for Packet {
+    fn from(packet: UseItem) -> Self {
+        Packet::UseItem(packet)
+    }
+}
+
+impl From<PlayerAction> for Packet {
+    fn from(packet: PlayerAction) -> Self {
+        Packet::PlayerAction(packet)
+    }
+}
+
+impl From<HurtArmor> for Packet {
+    fn from(packet: HurtArmor) -> Self {
+        Packet::HurtArmor(packet)
+    }
+}
+
+impl From<SetEntityMotion> for Packet {
+    fn from(packet: SetEntityMotion) -> Self {
+        Packet::SetEntityMotion(packet)
+    }
+}
+
+impl From<SetRiding> for Packet {
+    fn from(packet: SetRiding) -> Self {
+        Packet::SetRiding(packet)
+    }
+}
+
+impl From<SetHealth> for Packet {
+    fn from(packet: SetHealth) -> Self {
+        Packet::SetHealth(packet)
+    }
+}
+
+impl From<SetSpawnPosition> for Packet {
+    fn from(packet: SetSpawnPosition) -> Self {
+        Packet::SetSpawnPosition(packet)
+    }
+}
+
+impl From<Animate> for Packet {
+    fn from(packet: Animate) -> Self {
+        Packet::Animate(packet)
+    }
+}
+
+impl From<Respawn> for Packet {
+    fn from(packet: Respawn) -> Self {
+        Packet::Respawn(packet)
+    }
+}
+
+impl From<ContainerOpen> for Packet {
+    fn from(packet: ContainerOpen) -> Self {
+        Packet::ContainerOpen(packet)
+    }
+}
+
+impl From<ContainerClose> for Packet {
+    fn from(packet: ContainerClose) -> Self {
+        Packet::ContainerClose(packet)
+    }
+}
+
+impl From<ContainerSetData> for Packet {
+    fn from(packet: ContainerSetData) -> Self {
+        Packet::ContainerSetData(packet)
+    }
+}
+
+impl From<ContainerAck> for Packet {
+    fn from(packet: ContainerAck) -> Self {
+        Packet::ContainerAck(packet)
+    }
+}
+
+impl From<Chat> for Packet {
+    fn from(packet: Chat) -> Self {
+        Packet::Chat(packet)
+    }
+}
+
+impl From<SignUpdate> for Packet {
+    fn from(packet: SignUpdate) -> Self {
+        Packet::SignUpdate(packet)
+    }
+}
+
+impl From<AdventureSettings> for Packet {
+    fn from(packet: AdventureSettings) -> Self {
+        Packet::AdventureSettings(packet)
+    }
+}
+

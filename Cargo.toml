@@ -13,6 +13,8 @@ tokio = { version = "1.28.2", features = ["full"] }
 rand = "0.8.5"
 byteorder = "1.4.3"
 
+core.path = "crates/nostalgia_server_core"
+nbt.path = "crates/nostalgia_server_nbt"
 network.path = "crates/nostalgia_server_network"
 protocol.path = "crates/nostalgia_server_protocol"
 types.path = "crates/nostalgia_server_types"

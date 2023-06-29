@@ -336,6 +336,17 @@ with open(f"{BASE_PATH}mod.rs", "w") as file:
     file.write("    }\n")
     file.write("}\n")
 
+    file.write("\n")
+
+    for packet in MINECRAFT_PACKETS:
+        file.write(f"impl From<{packet.name}> for Packet {{\n")
+        file.write(f"    fn from(packet: {packet.name}) -> Self {{\n")
+        file.write(f"        Packet::{packet.name}(packet)\n")
+        file.write(f"    }}\n")
+        file.write(f"}}\n")
+        file.write("\n")
+
+
 for packet in MINECRAFT_PACKETS:
     has_vector3 = False
     for field in packet.fields:

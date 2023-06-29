@@ -1,8 +1,13 @@
 mod connection;
 
+use connection::Connection;
+use network::NetworkError;
 use network::{listener::Listener, reliability::Reliability};
 use protocol::Packet;
 use std::io::Cursor;
+use std::sync::mpsc::Receiver;
+use std::sync::{Arc, Mutex};
+use tokio::sync::mpsc::Sender;
 use types::Vector3;
 
 fn get_packet_bytes(packet: Packet) -> Vec<u8> {
@@ -12,6 +17,16 @@ fn get_packet_bytes(packet: Packet) -> Vec<u8> {
         .expect("Failed to serialize the packet");
     cursor.get_ref().clone()
 }
+
+struct Application {
+    listener: Listener,
+    connections: Vec<Connection>,
+    disconnection_sender: Sender<Connection>,
+    disconnection_receiver: Arc<Mutex<Receiver<Connection>>>,
+}
+
+const MINECRAFT_TICKRATE: u64 = 100;
+const MINECRAFT_TICKRATE_MS: f64 = 1000.0 / MINECRAFT_TICKRATE as f64;
 
 #[tokio::main]
 async fn main() {
@@ -24,50 +39,30 @@ async fn main() {
         tokio::time::sleep(tokio::time::Duration::from_millis(100)).await;
 
         let peer = listener.accept().await.expect("Failed to accept a peer");
-        loop {
-            let packet = peer.recv().await.expect("Failed to receive a packet");
-            let mut cursor = Cursor::new(packet);
+        let mut connection = Connection::new(peer);
 
-            let Some(minecraft_packet) =
-                Packet::parse(&mut cursor).expect("Failed to parse the packet") else {
-                    continue;
-                };
-
-            match minecraft_packet {
-                Packet::LoginRequest(_login_request) => {
-                    let login_response =
-                        Packet::LoginResponse(protocol::LoginResponse { status: 0 });
-
-                    peer.send(
-                        get_packet_bytes(login_response).as_slice(),
-                        Reliability::Reliable,
-                    )
-                    .await
-                    .expect("Failed to send a packet");
-
-                    let start_game = Packet::StartGame(protocol::StartGame {
-                        world_seed: 0,
-                        generator_version: 0,
-                        gamemode: 0,
-                        entity_id: 0,
-                        position: Vector3 {
-                            x: 128.0,
-                            y: 72.0,
-                            z: 128.0,
-                        },
-                    });
-
-                    peer.send(
-                        get_packet_bytes(start_game).as_slice(),
-                        Reliability::Reliable,
-                    )
-                    .await
-                    .expect("Failed to send a packet");
-                }
-                _ => {
-                    println!("Unhandled packet: {:?}", minecraft_packet);
-                }
+        tokio::spawn(async move {
+            match connection.run_worker().await {
+                Ok(_) => println!("Connection closed"),
+                Err(NetworkError::ConnectionClosed) => println!("Connection closed (disconnected)"),
+                Err(_) => println!("Connection closed (error)"),
             }
-        }
+        });
+
+        /*
+                let connection = Connection::new(peer);
+                tokio::spawn(async move {
+                    loop {
+                        match connection.run_worker().await {
+                            Ok(_) => break,
+                            Err(_) => disconnect_sender
+                                .lock()
+                                .await
+                                .send(connection.address)
+                                .expect("Failed to send a disconnection"),
+                        }
+                    }
+                });
+        */
     }
 }

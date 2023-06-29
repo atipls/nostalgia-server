@@ -682,7 +682,7 @@ impl Peer {
         }
     }
 
-    pub async fn recv(&self) -> Result<Vec<u8>> {
+    pub async fn receive(&self) -> Result<Vec<u8>> {
         match self.user_data_receiver.lock().await.recv().await {
             Some(p) => Ok(p),
             None => Err(if self.close_notifier.is_closed() {
