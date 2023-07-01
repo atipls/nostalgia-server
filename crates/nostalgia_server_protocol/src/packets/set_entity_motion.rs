@@ -31,4 +31,3 @@ impl SetEntityMotion {
         Ok(())
     }
 }
-

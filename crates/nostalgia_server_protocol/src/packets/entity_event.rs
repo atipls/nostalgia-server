@@ -22,4 +22,3 @@ impl EntityEvent {
         Ok(())
     }
 }
-

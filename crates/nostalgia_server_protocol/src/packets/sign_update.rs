@@ -28,4 +28,3 @@ impl SignUpdate {
         Ok(())
     }
 }
-

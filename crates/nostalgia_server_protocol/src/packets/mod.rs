@@ -1,93 +1,93 @@
+pub mod add_entity;
+pub mod add_painting;
+pub mod add_player;
+pub mod adventure_settings;
+pub mod animate;
+pub mod chat;
+pub mod container_ack;
+pub mod container_close;
+pub mod container_open;
+pub mod container_set_data;
+pub mod entity_event;
+pub mod explode;
+pub mod hurt_armor;
+pub mod interact;
+pub mod level_event;
 pub mod login_request;
 pub mod login_response;
-pub mod ready;
 pub mod message;
-pub mod set_time;
-pub mod start_game;
-pub mod add_player;
-pub mod remove_player;
-pub mod add_entity;
-pub mod remove_entity;
-pub mod take_item_entity;
 pub mod move_entity;
 pub mod move_entity_pos_rot;
-pub mod rotate_head;
 pub mod move_player;
 pub mod place_block;
-pub mod remove_block;
-pub mod update_block;
-pub mod add_painting;
-pub mod explode;
-pub mod level_event;
-pub mod tile_event;
-pub mod entity_event;
-pub mod request_chunk;
-pub mod player_equipment;
-pub mod player_armor_equipment;
-pub mod interact;
-pub mod use_item;
 pub mod player_action;
-pub mod hurt_armor;
-pub mod set_entity_motion;
-pub mod set_riding;
-pub mod set_health;
-pub mod set_spawn_position;
-pub mod animate;
+pub mod player_armor_equipment;
+pub mod player_equipment;
+pub mod ready;
+pub mod remove_block;
+pub mod remove_entity;
+pub mod remove_player;
+pub mod request_chunk;
 pub mod respawn;
-pub mod container_open;
-pub mod container_close;
-pub mod container_set_data;
-pub mod container_ack;
-pub mod chat;
+pub mod rotate_head;
+pub mod set_entity_motion;
+pub mod set_health;
+pub mod set_riding;
+pub mod set_spawn_position;
+pub mod set_time;
 pub mod sign_update;
-pub mod adventure_settings;
+pub mod start_game;
+pub mod take_item_entity;
+pub mod tile_event;
+pub mod update_block;
+pub mod use_item;
 
+pub use add_entity::*;
+pub use add_painting::*;
+pub use add_player::*;
+pub use adventure_settings::*;
+pub use animate::*;
+pub use chat::*;
+pub use container_ack::*;
+pub use container_close::*;
+pub use container_open::*;
+pub use container_set_data::*;
+pub use entity_event::*;
+pub use explode::*;
+pub use hurt_armor::*;
+pub use interact::*;
+pub use level_event::*;
 pub use login_request::*;
 pub use login_response::*;
-pub use ready::*;
 pub use message::*;
-pub use set_time::*;
-pub use start_game::*;
-pub use add_player::*;
-pub use remove_player::*;
-pub use add_entity::*;
-pub use remove_entity::*;
-pub use take_item_entity::*;
 pub use move_entity::*;
 pub use move_entity_pos_rot::*;
-pub use rotate_head::*;
 pub use move_player::*;
 pub use place_block::*;
-pub use remove_block::*;
-pub use update_block::*;
-pub use add_painting::*;
-pub use explode::*;
-pub use level_event::*;
-pub use tile_event::*;
-pub use entity_event::*;
-pub use request_chunk::*;
-pub use player_equipment::*;
-pub use player_armor_equipment::*;
-pub use interact::*;
-pub use use_item::*;
 pub use player_action::*;
-pub use hurt_armor::*;
-pub use set_entity_motion::*;
-pub use set_riding::*;
-pub use set_health::*;
-pub use set_spawn_position::*;
-pub use animate::*;
+pub use player_armor_equipment::*;
+pub use player_equipment::*;
+pub use ready::*;
+pub use remove_block::*;
+pub use remove_entity::*;
+pub use remove_player::*;
+pub use request_chunk::*;
 pub use respawn::*;
-pub use container_open::*;
-pub use container_close::*;
-pub use container_set_data::*;
-pub use container_ack::*;
-pub use chat::*;
+pub use rotate_head::*;
+pub use set_entity_motion::*;
+pub use set_health::*;
+pub use set_riding::*;
+pub use set_spawn_position::*;
+pub use set_time::*;
 pub use sign_update::*;
-pub use adventure_settings::*;
+pub use start_game::*;
+pub use take_item_entity::*;
+pub use tile_event::*;
+pub use update_block::*;
+pub use use_item::*;
 
-use std::io::{Cursor, Result};
 use crate::reader;
+use std::io::{Cursor, Result};
 
 #[derive(Clone, Debug)]
 pub enum Packet {
@@ -139,19 +139,31 @@ pub enum Packet {
 impl Packet {
     pub fn parse(mut cursor: &mut Cursor<Vec<u8>>) -> Result<Option<Self>> {
         match reader::read_u8(&mut cursor)? {
-            0x82 => Ok(Some(Packet::LoginRequest(LoginRequest::parse(&mut cursor)?))),
-            0x83 => Ok(Some(Packet::LoginResponse(LoginResponse::parse(&mut cursor)?))),
+            0x82 => Ok(Some(Packet::LoginRequest(LoginRequest::parse(
+                &mut cursor,
+            )?))),
+            0x83 => Ok(Some(Packet::LoginResponse(LoginResponse::parse(
+                &mut cursor,
+            )?))),
             0x84 => Ok(Some(Packet::Ready(Ready::parse(&mut cursor)?))),
             0x85 => Ok(Some(Packet::Message(Message::parse(&mut cursor)?))),
             0x86 => Ok(Some(Packet::SetTime(SetTime::parse(&mut cursor)?))),
             0x87 => Ok(Some(Packet::StartGame(StartGame::parse(&mut cursor)?))),
             0x89 => Ok(Some(Packet::AddPlayer(AddPlayer::parse(&mut cursor)?))),
-            0x8A => Ok(Some(Packet::RemovePlayer(RemovePlayer::parse(&mut cursor)?))),
+            0x8A => Ok(Some(Packet::RemovePlayer(RemovePlayer::parse(
+                &mut cursor,
+            )?))),
             0x8C => Ok(Some(Packet::AddEntity(AddEntity::parse(&mut cursor)?))),
-            0x8D => Ok(Some(Packet::RemoveEntity(RemoveEntity::parse(&mut cursor)?))),
-            0x8F => Ok(Some(Packet::TakeItemEntity(TakeItemEntity::parse(&mut cursor)?))),
+            0x8D => Ok(Some(Packet::RemoveEntity(RemoveEntity::parse(
+                &mut cursor,
+            )?))),
+            0x8F => Ok(Some(Packet::TakeItemEntity(TakeItemEntity::parse(
+                &mut cursor,
+            )?))),
             0x90 => Ok(Some(Packet::MoveEntity(MoveEntity::parse(&mut cursor)?))),
-            0x93 => Ok(Some(Packet::MoveEntityPosRot(MoveEntityPosRot::parse(&mut cursor)?))),
+            0x93 => Ok(Some(Packet::MoveEntityPosRot(MoveEntityPosRot::parse(
+                &mut cursor,
+            )?))),
             0x94 => Ok(Some(Packet::RotateHead(RotateHead::parse(&mut cursor)?))),
             0x95 => Ok(Some(Packet::MovePlayer(MovePlayer::parse(&mut cursor)?))),
             0x96 => Ok(Some(Packet::PlaceBlock(PlaceBlock::parse(&mut cursor)?))),
@@ -162,26 +174,48 @@ impl Packet {
             0x9B => Ok(Some(Packet::LevelEvent(LevelEvent::parse(&mut cursor)?))),
             0x9C => Ok(Some(Packet::TileEvent(TileEvent::parse(&mut cursor)?))),
             0x9D => Ok(Some(Packet::EntityEvent(EntityEvent::parse(&mut cursor)?))),
-            0x9E => Ok(Some(Packet::RequestChunk(RequestChunk::parse(&mut cursor)?))),
-            0xA0 => Ok(Some(Packet::PlayerEquipment(PlayerEquipment::parse(&mut cursor)?))),
-            0xA1 => Ok(Some(Packet::PlayerArmorEquipment(PlayerArmorEquipment::parse(&mut cursor)?))),
+            0x9E => Ok(Some(Packet::RequestChunk(RequestChunk::parse(
+                &mut cursor,
+            )?))),
+            0xA0 => Ok(Some(Packet::PlayerEquipment(PlayerEquipment::parse(
+                &mut cursor,
+            )?))),
+            0xA1 => Ok(Some(Packet::PlayerArmorEquipment(
+                PlayerArmorEquipment::parse(&mut cursor)?,
+            ))),
             0xA2 => Ok(Some(Packet::Interact(Interact::parse(&mut cursor)?))),
             0xA3 => Ok(Some(Packet::UseItem(UseItem::parse(&mut cursor)?))),
-            0xA4 => Ok(Some(Packet::PlayerAction(PlayerAction::parse(&mut cursor)?))),
+            0xA4 => Ok(Some(Packet::PlayerAction(PlayerAction::parse(
+                &mut cursor,
+            )?))),
             0xA6 => Ok(Some(Packet::HurtArmor(HurtArmor::parse(&mut cursor)?))),
-            0xA8 => Ok(Some(Packet::SetEntityMotion(SetEntityMotion::parse(&mut cursor)?))),
+            0xA8 => Ok(Some(Packet::SetEntityMotion(SetEntityMotion::parse(
+                &mut cursor,
+            )?))),
             0xA9 => Ok(Some(Packet::SetRiding(SetRiding::parse(&mut cursor)?))),
             0xAA => Ok(Some(Packet::SetHealth(SetHealth::parse(&mut cursor)?))),
-            0xAB => Ok(Some(Packet::SetSpawnPosition(SetSpawnPosition::parse(&mut cursor)?))),
+            0xAB => Ok(Some(Packet::SetSpawnPosition(SetSpawnPosition::parse(
+                &mut cursor,
+            )?))),
             0xAC => Ok(Some(Packet::Animate(Animate::parse(&mut cursor)?))),
             0xAD => Ok(Some(Packet::Respawn(Respawn::parse(&mut cursor)?))),
-            0xB0 => Ok(Some(Packet::ContainerOpen(ContainerOpen::parse(&mut cursor)?))),
-            0xB1 => Ok(Some(Packet::ContainerClose(ContainerClose::parse(&mut cursor)?))),
-            0xB3 => Ok(Some(Packet::ContainerSetData(ContainerSetData::parse(&mut cursor)?))),
-            0xB5 => Ok(Some(Packet::ContainerAck(ContainerAck::parse(&mut cursor)?))),
+            0xB0 => Ok(Some(Packet::ContainerOpen(ContainerOpen::parse(
+                &mut cursor,
+            )?))),
+            0xB1 => Ok(Some(Packet::ContainerClose(ContainerClose::parse(
+                &mut cursor,
+            )?))),
+            0xB3 => Ok(Some(Packet::ContainerSetData(ContainerSetData::parse(
+                &mut cursor,
+            )?))),
+            0xB5 => Ok(Some(Packet::ContainerAck(ContainerAck::parse(
+                &mut cursor,
+            )?))),
             0xB6 => Ok(Some(Packet::Chat(Chat::parse(&mut cursor)?))),
             0xB7 => Ok(Some(Packet::SignUpdate(SignUpdate::parse(&mut cursor)?))),
-            0xB8 => Ok(Some(Packet::AdventureSettings(AdventureSettings::parse(&mut cursor)?))),
+            0xB8 => Ok(Some(Packet::AdventureSettings(AdventureSettings::parse(
+                &mut cursor,
+            )?))),
             _ => Ok(None),
         }
     }
@@ -492,4 +526,3 @@ impl From<AdventureSettings> for Packet {
         Packet::AdventureSettings(packet)
     }
 }
-

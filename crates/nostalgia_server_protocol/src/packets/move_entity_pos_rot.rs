@@ -29,4 +29,3 @@ impl MoveEntityPosRot {
         Ok(())
     }
 }
-

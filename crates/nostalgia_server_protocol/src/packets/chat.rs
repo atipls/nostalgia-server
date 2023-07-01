@@ -19,4 +19,3 @@ impl Chat {
         Ok(())
     }
 }
-

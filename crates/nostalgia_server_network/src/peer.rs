@@ -693,3 +693,9 @@ impl Peer {
         }
     }
 }
+
+impl PartialEq for Peer {
+    fn eq(&self, other: &Self) -> bool {
+        self.peer_addr == other.peer_addr
+    }
+}

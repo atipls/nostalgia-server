@@ -32,4 +32,3 @@ impl StartGame {
         Ok(())
     }
 }
-

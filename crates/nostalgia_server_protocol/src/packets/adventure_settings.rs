@@ -22,4 +22,3 @@ impl AdventureSettings {
         Ok(())
     }
 }
-

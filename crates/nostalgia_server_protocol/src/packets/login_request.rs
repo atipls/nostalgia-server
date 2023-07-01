@@ -31,4 +31,3 @@ impl LoginRequest {
         Ok(())
     }
 }
-

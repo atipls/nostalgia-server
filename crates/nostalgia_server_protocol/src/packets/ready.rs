@@ -19,4 +19,3 @@ impl Ready {
         Ok(())
     }
 }
-

@@ -28,4 +28,3 @@ impl ContainerOpen {
         Ok(())
     }
 }
-

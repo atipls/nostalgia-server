@@ -22,4 +22,3 @@ impl SetRiding {
         Ok(())
     }
 }
-

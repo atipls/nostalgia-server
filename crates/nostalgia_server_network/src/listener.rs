@@ -119,7 +119,7 @@ impl Listener {
         let should_close_notifier = self.should_close_notifier.clone();
 
         tokio::spawn(async move {
-            let mut buffer = [0u8; 1024];
+            let mut buffer = [0u8; 2048];
 
             loop {
                 let (address, length) = tokio::select! {

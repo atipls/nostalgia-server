@@ -19,4 +19,3 @@ impl ContainerClose {
         Ok(())
     }
 }
-

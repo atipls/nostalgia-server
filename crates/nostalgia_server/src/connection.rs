@@ -24,10 +24,7 @@ impl Connection {
 
             match minecraft_packet {
                 Packet::LoginRequest(_login_request) => {
-                    self.send_packet(LoginResponse { status: 0 })
-                        .await
-                        .expect("Failed to send the login response");
-
+                    self.send_packet(LoginResponse { status: 0 }).await?;
                     self.send_packet(StartGame {
                         world_seed: 0,
                         generator_version: 0,
@@ -39,8 +36,10 @@ impl Connection {
                             z: 128.0,
                         },
                     })
-                    .await
-                    .expect("Failed to send the start game packet");
+                    .await?;
+                }
+                Packet::Message(message) => {
+                    self.send_packet(message).await?;
                 }
                 _ => {
                     println!("Unhandled packet: {:?}", minecraft_packet);
@@ -59,5 +58,15 @@ impl Connection {
             .await?;
 
         Ok(())
+    }
+
+    pub fn peer(&self) -> &Peer {
+        &self.peer
+    }
+}
+
+impl PartialEq for Connection {
+    fn eq(&self, other: &Self) -> bool {
+        self.peer == other.peer
     }
 }

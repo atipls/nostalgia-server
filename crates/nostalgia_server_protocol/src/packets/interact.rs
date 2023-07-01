@@ -25,4 +25,3 @@ impl Interact {
         Ok(())
     }
 }
-
