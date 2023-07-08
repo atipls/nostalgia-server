@@ -13,16 +13,16 @@ use nbt::{Nbt, Tag};
 use byteorder::{LittleEndian, ReadBytesExt};
 
 pub struct World {
-    name: String,
-    spawn_mobs: bool,
-    seed: i64,
-    time: i64,
-    spawn_position: (i32, i32, i32),
-    platform: i32,
-    game_type: i32,
-    storage_version: i32,
-    day_cycle_stop_time: i64,
-    last_played: i64,
+    pub name: String,
+    pub spawn_mobs: bool,
+    pub seed: i64,
+    pub time: i64,
+    pub spawn_position: (i32, i32, i32),
+    pub platform: i32,
+    pub game_type: i32,
+    pub storage_version: i32,
+    pub day_cycle_stop_time: i64,
+    pub last_played: i64,
 
     chunks: Vec<Chunk>,
     entities: Vec<Tag>,

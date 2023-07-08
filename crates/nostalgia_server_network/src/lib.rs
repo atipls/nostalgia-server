@@ -24,6 +24,7 @@ pub enum NetworkError {
     ConnectionClosed,
     SocketError,
     BindError,
+    ReceiveTimeout,
 }
 
 impl From<std::io::Error> for NetworkError {

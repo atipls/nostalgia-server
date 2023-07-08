@@ -12,7 +12,7 @@ use world::World;
 
 struct Application {
     listener: Listener,
-    world: World,
+    world: Arc<Mutex<World>>,
     connections: Arc<Mutex<Vec<Arc<Mutex<Connection>>>>>,
     global_packet_sender: Arc<Mutex<Sender<Packet>>>,
     global_packet_receiver: Arc<Mutex<Receiver<Packet>>>,
@@ -27,7 +27,7 @@ impl Application {
 
         Self {
             listener,
-            world,
+            world: Arc::new(Mutex::new(world)),
             connections: Arc::new(Mutex::new(Vec::new())),
             global_packet_sender: Arc::new(Mutex::new(global_packet_sender)),
             global_packet_receiver: Arc::new(Mutex::new(global_packet_receiver)),
@@ -45,14 +45,21 @@ impl Application {
             let mut connections = self.connections.lock().await;
             connections.push(connection.clone());
 
+            let global_packet_sender = self.global_packet_sender.clone();
+            let world = self.world.clone();
             tokio::spawn(async move {
-                let mut connection = connection.lock().await;
-                match connection.run_worker().await {
-                    Ok(_) => println!("Connection closed"),
-                    Err(NetworkError::ConnectionClosed) => {
-                        println!("Connection closed (disconnected)")
+                loop {
+                    let global_packet_sender = global_packet_sender.clone();
+
+                    let mut connection = connection.lock().await;
+                    match connection.update(global_packet_sender, world.clone()).await {
+                        Ok(_) => {}
+                        Err(NetworkError::ConnectionClosed) => {
+                            println!("Connection closed (disconnected)");
+                            break;
+                        }
+                        Err(error) => println!("Connection closed ({:#?})", error),
                     }
-                    Err(error) => println!("Connection closed ({:#?})", error),
                 }
             });
 

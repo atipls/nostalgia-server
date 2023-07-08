@@ -7,6 +7,7 @@ use crate::{
 };
 use std::io::Cursor;
 use std::sync::atomic::{AtomicU64, Ordering};
+use std::time::Duration;
 use std::{net::SocketAddr, sync::Arc};
 use tokio::{
     net::UdpSocket,
@@ -682,14 +683,22 @@ impl Peer {
         }
     }
 
-    pub async fn receive(&self) -> Result<Vec<u8>> {
-        match self.user_data_receiver.lock().await.recv().await {
-            Some(p) => Ok(p),
-            None => Err(if self.close_notifier.is_closed() {
-                NetworkError::ConnectionClosed
-            } else {
-                NetworkError::SocketError
-            }),
+    pub async fn receive(&self, timeout: Duration) -> Result<Vec<u8>> {
+        let mut user_data_receiver = self.user_data_receiver.lock().await;
+        tokio::select! {
+            user_data = user_data_receiver.recv() => {
+                match user_data {
+                    Some(p) => Ok(p),
+                    None => Err(if self.close_notifier.is_closed() {
+                        NetworkError::ConnectionClosed
+                    } else {
+                        NetworkError::SocketError
+                    }),
+                }
+            }
+            _ = tokio::time::sleep(timeout) => {
+                Err(NetworkError::ReceiveTimeout)
+            }
         }
     }
 }
