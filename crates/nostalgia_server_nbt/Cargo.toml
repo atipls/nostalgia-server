@@ -1,0 +1,9 @@
+[package]
+name = "nbt"
+description = "NBT saving and loading for Nostalgia Server"
+license.workspace = true
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+byteorder.workspace = true
