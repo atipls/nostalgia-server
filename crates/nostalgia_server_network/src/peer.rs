@@ -1,5 +1,5 @@
 use crate::current_timestamp_milliseconds;
-use crate::protocol::{ConnectedPacket, UnconnectedPacket};
+use crate::protocol::{ConnectedPacket};
 use crate::reliability::FrameVec;
 use crate::{
     reliability::{Frame, RecvQueue, Reliability, SendQueue},
@@ -85,9 +85,9 @@ impl Peer {
 
         match connected_packet {
             ConnectedPacket::ConnectionRequest {
-                client_guid,
+                client_guid: _,
                 timestamp,
-                use_encryption,
+                use_encryption: _,
             } => {
                 Self::send_packet(
                     sendq,
@@ -104,10 +104,10 @@ impl Peer {
                 Ok(true)
             }
             ConnectedPacket::ConnectionRequestAccepted {
-                client_address,
-                system_index,
+                client_address: _,
+                system_index: _,
                 request_timestamp,
-                accepted_timestamp,
+                accepted_timestamp: _,
             } => {
                 Self::send_packet(
                     sendq,
@@ -124,9 +124,9 @@ impl Peer {
                 Ok(true)
             }
             ConnectedPacket::NewIncomingConnection {
-                server_address,
-                request_timestamp,
-                accepted_timestamp,
+                server_address: _,
+                request_timestamp: _,
+                accepted_timestamp: _,
             } => Ok(true),
             ConnectedPacket::Ping { timestamp } => {
                 Self::send_packet(
@@ -142,8 +142,8 @@ impl Peer {
                 Ok(true)
             }
             ConnectedPacket::Pong {
-                timestamp,
-                server_time,
+                timestamp: _,
+                server_time: _,
             } => Ok(true),
             _ => Ok(false),
         }
@@ -152,7 +152,7 @@ impl Peer {
     async fn sendto(s: &UdpSocket, buf: &[u8], target: &SocketAddr) -> tokio::io::Result<usize> {
         match s.send_to(buf, target).await {
             Ok(p) => Ok(p),
-            Err(e) => Ok(0),
+            Err(_e) => Ok(0),
         }
     }
 
@@ -516,7 +516,7 @@ impl Peer {
         let peer_addr = self.peer_addr;
         let sendq = self.send_queue.clone();
         let recvq = self.recv_queue.clone();
-        let mut last_monitor_tick = current_timestamp_milliseconds();
+        let _last_monitor_tick = current_timestamp_milliseconds();
         let last_heartbeat_time = self.last_heartbeat_time.clone();
         tokio::spawn(async move {
             loop {
@@ -571,7 +571,7 @@ impl Peer {
                 Some(p) => {
                     match p.lock().await.send(peer_addr).await {
                         Ok(_) => {}
-                        Err(e) => {}
+                        Err(_e) => {}
                     };
                 }
                 None => {}

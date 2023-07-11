@@ -1,0 +1,13 @@
+[package]
+name = "renderer"
+description = "World renderer for Nostalgia Server"
+license.workspace = true
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+world.workspace = true
+rand.workspace = true
+bevy = { version = "0.10.1", features = ["tga"] }
+bevy_fly_camera = "0.10.0"
+block-mesh = "0.2.0"

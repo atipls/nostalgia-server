@@ -613,7 +613,7 @@ impl SendQueue {
         }
     }
 
-    pub fn flush(&mut self, tick: u64, peer_addr: &SocketAddr) -> Vec<Frame> {
+    pub fn flush(&mut self, tick: u64, _peer_addr: &SocketAddr) -> Vec<Frame> {
         self.tick(tick);
 
         let mut ret = vec![];

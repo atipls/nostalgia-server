@@ -1,6 +1,6 @@
 use crate::{
     reliability::{Frame, Reliability},
-    {NetworkError, Result},
+    {Result},
 };
 use std::collections::HashMap;
 

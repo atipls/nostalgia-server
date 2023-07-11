@@ -24,7 +24,7 @@ pub struct World {
     pub day_cycle_stop_time: i64,
     pub last_played: i64,
 
-    chunks: Vec<Chunk>,
+    pub chunks: Vec<Chunk>,
     entities: Vec<Tag>,
 }
 
@@ -78,15 +78,30 @@ impl World {
             };
         }
 
+        #[cfg(not(target_arch = "wasm32"))]
         let level = std::fs::read(path.join("level.dat"))?;
+
+        #[cfg(target_arch = "wasm32")]
+        let level = include_bytes!("../../../assets/MainWorld/level.dat").to_vec();
+
         let level = Self::read_level_data(level)?;
         let level_root = level.root();
 
+        #[cfg(not(target_arch = "wasm32"))]
         let entities = std::fs::read(path.join("entities.dat"))?;
+
+        #[cfg(target_arch = "wasm32")]
+        let entities = include_bytes!("../../../assets/MainWorld/entities.dat").to_vec();
+
         let entities = Self::read_entity_data(entities)?;
         let entities_root = entities.root();
 
+        #[cfg(not(target_arch = "wasm32"))]
         let chunks = std::fs::read(path.join("chunks.dat"))?;
+
+        #[cfg(target_arch = "wasm32")]
+        let chunks = include_bytes!("../../../assets/MainWorld/chunks.dat").to_vec();
+
         let mut chunks = Cursor::new(chunks);
         let chunk_metadata = Self::read_chunk_metadata(&mut chunks)?;
 
