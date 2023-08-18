@@ -78,30 +78,16 @@ impl World {
             };
         }
 
-        #[cfg(not(target_arch = "wasm32"))]
         let level = std::fs::read(path.join("level.dat"))?;
-
-        #[cfg(target_arch = "wasm32")]
-        let level = include_bytes!("../../../assets/MainWorld/level.dat").to_vec();
-
-        let level = Self::read_level_data(level)?;
-        let level_root = level.root();
-
-        #[cfg(not(target_arch = "wasm32"))]
         let entities = std::fs::read(path.join("entities.dat"))?;
 
-        #[cfg(target_arch = "wasm32")]
-        let entities = include_bytes!("../../../assets/MainWorld/entities.dat").to_vec();
-
+        let level = Self::read_level_data(level)?;
         let entities = Self::read_entity_data(entities)?;
+
+        let level_root = level.root();
         let entities_root = entities.root();
 
-        #[cfg(not(target_arch = "wasm32"))]
         let chunks = std::fs::read(path.join("chunks.dat"))?;
-
-        #[cfg(target_arch = "wasm32")]
-        let chunks = include_bytes!("../../../assets/MainWorld/chunks.dat").to_vec();
-
         let mut chunks = Cursor::new(chunks);
         let chunk_metadata = Self::read_chunk_metadata(&mut chunks)?;
 

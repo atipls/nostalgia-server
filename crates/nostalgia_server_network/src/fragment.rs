@@ -1,6 +1,6 @@
 use crate::{
     reliability::{Frame, Reliability},
-    {Result},
+    Result,
 };
 use std::collections::HashMap;
 

@@ -1,5 +1,5 @@
 use crate::current_timestamp_milliseconds;
-use crate::protocol::{ConnectedPacket};
+use crate::protocol::ConnectedPacket;
 use crate::reliability::FrameVec;
 use crate::{
     reliability::{Frame, RecvQueue, Reliability, SendQueue},

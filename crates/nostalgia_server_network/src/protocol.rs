@@ -1,4 +1,4 @@
-use crate::{Result};
+use crate::Result;
 use byteorder::{BigEndian, LittleEndian, ReadBytesExt, WriteBytesExt};
 use std::{
     io::{Cursor, Seek, SeekFrom, Write},
@@ -10,7 +10,7 @@ const RAKNET_MAGIC: &[u8; 16] = &[
 ];
 
 mod extensions {
-    use crate::{Result};
+    use crate::Result;
     use byteorder::{BigEndian, ReadBytesExt, WriteBytesExt};
     use std::{
         io::{Cursor, Read, Write},

@@ -1,7 +1,9 @@
 mod mesher;
 mod uv;
 
+use bevy::log::LogPlugin;
 use bevy::window::CursorGrabMode;
+use std::num::NonZeroU8;
 use std::path::PathBuf;
 use std::time::Duration;
 
@@ -19,19 +21,34 @@ use bevy_fly_camera::{FlyCamera, FlyCameraPlugin};
 #[derive(Resource)]
 struct TextureAtlasImage(Handle<Image>);
 
-pub static mut TOTAL_QUADS: usize = 0;
+#[derive(Resource)]
+struct SuzanneBlenderMonkey(Handle<Mesh>);
 
 fn main() {
     App::new()
         .add_plugins(
             DefaultPlugins
-                .set(ImagePlugin::default_linear())
+                .set(ImagePlugin {
+                    default_sampler: SamplerDescriptor {
+                        address_mode_u: AddressMode::Repeat,
+                        address_mode_v: AddressMode::Repeat,
+                        mag_filter: FilterMode::Nearest,
+                        min_filter: FilterMode::Nearest,
+                        mipmap_filter: FilterMode::Nearest,
+                        anisotropy_clamp: NonZeroU8::new(16u8),
+                        ..Default::default()
+                    },
+                })
                 .set(WindowPlugin {
                     primary_window: Some(Window {
                         title: "What if minecraft was in rust".into(),
                         ..default()
                     }),
                     ..default()
+                })
+                .set(LogPlugin {
+                    filter: "warn".into(),
+                    level: bevy::log::Level::DEBUG,
                 }),
         )
         .add_plugin(FlyCameraPlugin)
@@ -42,6 +59,7 @@ fn main() {
             filter: None,
         })
         .add_plugin(WireframePlugin)
+        .insert_resource(Msaa::default())
         .add_startup_system(setup_camera)
         .add_startup_system(load_texture_atlas_image.in_base_set(StartupSet::PreStartup))
         .add_startup_system(update_texture_atlas_repeat.in_base_set(StartupSet::PostStartup))
@@ -126,8 +144,9 @@ fn update_texture_atlas_repeat(
                         address_mode_u: AddressMode::Repeat,
                         address_mode_v: AddressMode::Repeat,
                         mag_filter: FilterMode::Nearest,
-                        min_filter: FilterMode::Nearest,
+                        min_filter: FilterMode::Linear,
                         mipmap_filter: FilterMode::Nearest,
+                        anisotropy_clamp: NonZeroU8::new(16u8),
                         ..Default::default()
                     });
                 }
@@ -190,7 +209,7 @@ fn load_world_file(
 
     commands.insert_resource(AmbientLight {
         color: Color::WHITE,
-        brightness: 0.5,
+        brightness: 0.2,
     });
 
     let world_path = PathBuf::from("assets/MainWorld");
@@ -203,9 +222,13 @@ fn load_world_file(
         let chunk_z = chunk_index / 16;
 
         let corner_chunks: [Option<&world::Chunk>; 4] = [
-            world.chunks.get((chunk_x - 1) + (chunk_z * 16)),
+            world
+                .chunks
+                .get((chunk_x.checked_sub(1).unwrap_or(0xFFF)) + (chunk_z * 16)),
             world.chunks.get((chunk_x + 1) + (chunk_z * 16)),
-            world.chunks.get(chunk_x + ((chunk_z - 1) * 16)),
+            world
+                .chunks
+                .get(chunk_x + ((chunk_z.checked_sub(1).unwrap_or(0xFFF)) * 16)),
             world.chunks.get(chunk_x + ((chunk_z + 1) * 16)),
         ];
 
@@ -223,8 +246,6 @@ fn load_world_file(
             )),
         );
     }
-
-    info!("Loaded world, total quads: {}", unsafe { TOTAL_QUADS });
 }
 
 fn setup_camera(mut commands: Commands) {

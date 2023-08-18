@@ -1,0 +1,9 @@
+[package]
+name = "entity"
+description = "Entity definitions for Nostalgia Server"
+license.workspace = true
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+types.workspace = true

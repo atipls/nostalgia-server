@@ -1,12 +1,12 @@
 [workspace]
 members = ["crates/*"]
+default-members = ["crates/nostalgia_server", "crates/nostalgia_server_renderer"]
 resolver = "2"
 
 [workspace.package]
 license = "MIT"
 version = "0.1.0"
 edition = "2021"
-
 
 [workspace.dependencies]
 tokio = { version = "1.29.1", features = ["full"] }

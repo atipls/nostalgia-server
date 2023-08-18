@@ -62,7 +62,7 @@ pub enum BlockID {
     WallSign = 68,
     IronDoorBlock = 71,
     RedstoneOre = 73,
-    Unknown2 = 74,
+    GlowingRedstoneOre = 74,
     Snow = 78,
     Ice = 79,
     SnowBlock = 80,

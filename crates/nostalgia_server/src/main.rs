@@ -41,18 +41,18 @@ impl Application {
             tokio::time::sleep(tokio::time::Duration::from_millis(100)).await;
             let peer = self.listener.accept().await?;
 
-            let connection = Arc::new(Mutex::new(Connection::new(peer)));
+            let world = self.world.clone();
+            let connection = Arc::new(Mutex::new(Connection::new(peer, world)));
             let mut connections = self.connections.lock().await;
             connections.push(connection.clone());
 
             let global_packet_sender = self.global_packet_sender.clone();
-            let world = self.world.clone();
             tokio::spawn(async move {
                 loop {
                     let global_packet_sender = global_packet_sender.clone();
 
                     let mut connection = connection.lock().await;
-                    match connection.update(global_packet_sender, world.clone()).await {
+                    match connection.update(global_packet_sender).await {
                         Ok(_) => {}
                         Err(NetworkError::ConnectionClosed) => {
                             println!("Connection closed (disconnected)");
@@ -100,8 +100,35 @@ impl Application {
     }
 }
 
+#[derive(Debug, Copy, Clone)]
+struct Test {
+    value: i32,
+}
+
+impl Test {
+    pub fn new() -> Self {
+        Self { value: 0 }
+    }
+
+    pub fn update(mut self) {
+        self.value += 1;
+    }
+
+    fn call_update(self) {
+        { self }.update();
+    }
+}
+
 #[tokio::main]
 async fn main() {
+    let mut test = Test::new();
+    if true {
+        test.call_update();
+    }
+    test.call_update();
+
+    println!("{:#?}", test);
+
     let address = "0.0.0.0:19132".parse().expect("Address is already in use");
     let listener = Listener::started(&address, "Nostalgia Server".to_string())
         .await

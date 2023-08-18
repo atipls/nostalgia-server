@@ -18,10 +18,11 @@ pub const MINECRAFT_COORDINATE_CONFIG: QuadCoordinateConfig = QuadCoordinateConf
         OrientedBlockFace::new(-1, AxisPermutation::Zxy), // -Z
         OrientedBlockFace::new(1, AxisPermutation::Zxy),  // +Z
     ],
-    u_flip_face: block_mesh::Axis::Z,
+    u_flip_face: block_mesh::Axis::X,
 };
 
 #[derive(Clone, Copy, Debug)]
+#[repr(transparent)]
 struct Block(world::Block);
 
 impl Voxel for Block {
@@ -40,6 +41,8 @@ impl Voxel for Block {
             BlockID::Flower,
             BlockID::Dandelion,
             BlockID::BeetrootBlock,
+            BlockID::CarrotBlock,
+            BlockID::Cactus,
         ];
 
         if TRANSPARENT_BLOCKS.contains(&self.0.id) {
@@ -158,10 +161,10 @@ pub fn build_cube_meshes(chunk: &world::Chunk, corner_chunks: [Option<&world::Ch
             let block = &chunk_data[ChunkShape::linearize(quad.minimum) as usize];
             let minecraft_uv_coords = get_uv_coords_for_block_id(block.0.id);
 
-            let u0 = minecraft_uv_coords[0];
-            let v0 = minecraft_uv_coords[1];
-            let u1 = minecraft_uv_coords[2];
-            let v1 = minecraft_uv_coords[3];
+            let u0 = ((minecraft_uv_coords[0] * 512.0).round() + 0.2) / 512.0;
+            let v0 = ((minecraft_uv_coords[1] * 256.0).round() + 0.2) / 256.0;
+            let u1 = ((minecraft_uv_coords[2] * 512.0).round() - 0.2) / 512.0;
+            let v1 = ((minecraft_uv_coords[3] * 256.0).round() - 0.2) / 256.0;
 
             tex_coords.extend_from_slice(&[[u0, v0], [u0, v1], [u1, v0], [u1, v1]]);
         }
