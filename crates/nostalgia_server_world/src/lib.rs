@@ -25,7 +25,7 @@ pub struct World {
     pub last_played: i64,
 
     pub chunks: Vec<Chunk>,
-    entities: Vec<Tag>,
+    pub entities: Vec<Tag>,
 }
 
 impl World {

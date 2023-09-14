@@ -1,6 +1,6 @@
 use byteorder::{BigEndian, LittleEndian, ReadBytesExt};
 use std::io::{Cursor, Read, Result};
-use types::Vector3;
+use types::{ItemInstance, Vector3};
 
 #[inline]
 pub fn read_i8(cursor: &mut Cursor<Vec<u8>>) -> Result<i8> {
@@ -76,4 +76,26 @@ pub fn read_vector3(cursor: &mut Cursor<Vec<u8>>) -> Result<Vector3> {
     let y = read_f32(cursor)?;
     let z = read_f32(cursor)?;
     Ok(Vector3 { x, y, z })
+}
+
+#[inline]
+pub fn read_item_instance(cursor: &mut Cursor<Vec<u8>>) -> Result<ItemInstance> {
+    let id = read_i16(cursor)?;
+    let count = read_i8(cursor)?;
+    let metadata = read_i16(cursor)?;
+    Ok(ItemInstance {
+        id,
+        count,
+        metadata,
+    })
+}
+
+#[inline]
+pub fn read_item_instance_list(cursor: &mut Cursor<Vec<u8>>) -> Result<Vec<ItemInstance>> {
+    let length = read_u16(cursor)? as usize;
+    let mut items = Vec::with_capacity(length);
+    for _ in 0..length {
+        items.push(read_item_instance(cursor)?);
+    }
+    Ok(items)
 }

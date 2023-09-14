@@ -11,3 +11,6 @@ network.workspace = true
 protocol.workspace = true
 types.workspace = true
 world.workspace = true
+entity.workspace = true
+console-subscriber = "0.1.10"
+

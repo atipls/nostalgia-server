@@ -145,7 +145,9 @@ impl Listener {
                 let buffer = buffer[..length].to_vec();
                 let mut cursor = Cursor::new(buffer);
 
-                let Ok(packet) = UnconnectedPacket::parse(&mut cursor) else { continue };
+                let Ok(packet) = UnconnectedPacket::parse(&mut cursor) else {
+                    continue;
+                };
                 let Some(packet) = packet else { continue };
 
                 println!("Got packet: {:?}", packet);

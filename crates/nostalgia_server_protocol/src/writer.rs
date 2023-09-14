@@ -1,6 +1,6 @@
 use byteorder::{BigEndian, LittleEndian, WriteBytesExt};
 use std::io::{Cursor, Result, Write};
-use types::Vector3;
+use types::{ItemInstance, Vector3};
 
 #[inline]
 pub fn write_i8(cursor: &mut Cursor<Vec<u8>>, value: i8) -> Result<()> {
@@ -73,4 +73,23 @@ pub fn write_vector3(cursor: &mut Cursor<Vec<u8>>, value: &Vector3) -> Result<()
     write_f32(cursor, value.x)?;
     write_f32(cursor, value.y)?;
     write_f32(cursor, value.z)
+}
+
+#[inline]
+pub fn write_iteminstance(cursor: &mut Cursor<Vec<u8>>, value: &ItemInstance) -> Result<()> {
+    write_i16(cursor, value.id)?;
+    write_i8(cursor, value.count)?;
+    write_i16(cursor, value.metadata)
+}
+
+#[inline]
+pub fn write_iteminstance_list(
+    cursor: &mut Cursor<Vec<u8>>,
+    value: &Vec<ItemInstance>,
+) -> Result<()> {
+    write_u16(cursor, value.len() as u16)?;
+    for item in value {
+        write_iteminstance(cursor, item)?;
+    }
+    Ok(())
 }

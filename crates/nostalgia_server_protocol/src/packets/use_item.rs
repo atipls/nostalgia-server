@@ -6,7 +6,7 @@ use types::Vector3;
 pub struct UseItem {
     pub x: i32,
     pub y: i32,
-    pub face: i32,
+    pub z: i32,
     pub block: u16,
     pub meta: u8,
     pub id: i32,
@@ -19,7 +19,7 @@ impl UseItem {
         Ok(Self {
             x: reader::read_i32(&mut cursor)?,
             y: reader::read_i32(&mut cursor)?,
-            face: reader::read_i32(&mut cursor)?,
+            z: reader::read_i32(&mut cursor)?,
             block: reader::read_u16(&mut cursor)?,
             meta: reader::read_u8(&mut cursor)?,
             id: reader::read_i32(&mut cursor)?,
@@ -32,7 +32,7 @@ impl UseItem {
         writer::write_u8(&mut cursor, 0xA3)?;
         writer::write_i32(&mut cursor, self.x)?;
         writer::write_i32(&mut cursor, self.y)?;
-        writer::write_i32(&mut cursor, self.face)?;
+        writer::write_i32(&mut cursor, self.z)?;
         writer::write_u16(&mut cursor, self.block)?;
         writer::write_u8(&mut cursor, self.meta)?;
         writer::write_i32(&mut cursor, self.id)?;
