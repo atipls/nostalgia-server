@@ -53,14 +53,14 @@ MINECRAFT_PACKETS = [
         Field(name="entity_id", type="i32"),
         Field(name="position", type="Vector3"),
     ]),
-    # Packet(name="AddMob", id=136, fields=[
-    #     Field(name="entity_id", type="i32"),
-    #     Field(name="entity_type", type="i32"),
-    #     Field(name="pos", type="Vector3"),
-    #     Field(name="yaw", type="u8"),
-    #     Field(name="pitch", type="u8"),
-    #     Field(name="metadata", type="SyncedEntityData"),
-    # ]),
+    Packet(name="AddMob", id=136, fields=[
+        Field(name="entity_id", type="i32"),
+        Field(name="entity_type", type="i32"),
+        Field(name="pos", type="Vector3"),
+        Field(name="yaw", type="u8"),
+        Field(name="pitch", type="u8"),
+        Field(name="metadata", type="SyncedEntityData"),
+    ]),
     Packet(name="AddPlayer", id=137, fields=[
         Field(name="player_id", type="u64"),
         Field(name="username", type="String"),
@@ -85,14 +85,14 @@ MINECRAFT_PACKETS = [
     Packet(name="RemoveEntity", id=141, fields=[
         Field(name="entity_id", type="i32"),
     ]),
-    # Packet(name="AddItemEntity", id=142, fields=[
-    #     Field(name="entity_id", type="i32"),
-    #     Field(name="item", type="ItemInstance"),
-    #     Field(name="pos", type="Vector3"),
-    #     Field(name="yaw", type="u8"),
-    #     Field(name="pitch", type="u8"),
-    #     Field(name="roll", type="u8"),
-    # ]),
+    Packet(name="AddItemEntity", id=142, fields=[
+        Field(name="entity_id", type="i32"),
+        Field(name="item", type="ItemInstance"),
+        Field(name="pos", type="Vector3"),
+        Field(name="yaw", type="u8"),
+        Field(name="pitch", type="u8"),
+        Field(name="roll", type="u8"),
+    ]),
     Packet(name="TakeItemEntity", id=143, fields=[
         Field(name="target", type="i32"),
         Field(name="entity_id", type="i32"),
@@ -172,12 +172,12 @@ MINECRAFT_PACKETS = [
         Field(name="x", type="i32"),
         Field(name="z", type="i32"),
     ]),
-    # Packet(name="ChunkData", id=159, fields=[
-    #     Field(name="x", type="i32"),
-    #     Field(name="z", type="i32"),
-    #     Field(name="is_new", type="u8"),
-    #     Field(name="data", type="Chunk"),
-    # ]),
+    Packet(name="SendChunkData", id=159, fields=[
+        Field(name="x", type="i32"),
+        Field(name="z", type="i32"),
+        Field(name="is_new", type="u8"),
+        Field(name="data", type="Chunk"),
+    ]),
     Packet(name="PlayerEquipment", id=160, fields=[
         Field(name="entity_id", type="i32"),
         Field(name="block", type="u16"),
@@ -216,10 +216,10 @@ MINECRAFT_PACKETS = [
     Packet(name="HurtArmor", id=166, fields=[
         Field(name="armor", type="u8"),
     ]),
-    # Packet(name="SetEntityData", id=167, fields=[
-    #     Field(name="entity_id", type="i32"),
-    #     Field(name="metadata", type="SyncedEntityData"),
-    # ]),
+    Packet(name="SetEntityData", id=167, fields=[
+        Field(name="entity_id", type="i32"),
+        Field(name="metadata", type="SyncedEntityData"),
+    ]),
     Packet(name="SetEntityMotion", id=168, fields=[
         Field(name="unk0", type="u8"),
         Field(name="entity_id", type="i32"),
@@ -247,16 +247,16 @@ MINECRAFT_PACKETS = [
         Field(name="entity_id", type="i32"),
         Field(name="pos", type="Vector3"),
     ]),
-    # Packet(name="SendInventory", id=174, fields=[
-    #     Field(name="entity_id", type="i32"),
-    #     Field(name="window_id", type="u8"),
-    #     Field(name="items", type="ItemInstanceList"),
-    # ]),
-    # Packet(name="DropItem", id=175, fields=[
-    #     Field(name="entity_id", type="i32"),
-    #     Field(name="unk0", type="u8"),
-    #     Field(name="item", type="ItemInstance"),
-    # ]),
+    Packet(name="SendInventory", id=174, fields=[
+        Field(name="entity_id", type="i32"),
+        Field(name="window_id", type="u8"),
+        Field(name="items", type="ItemInstanceList"),
+    ]),
+    Packet(name="DropItem", id=175, fields=[
+        Field(name="entity_id", type="i32"),
+        Field(name="unk0", type="u8"),
+        Field(name="item", type="ItemInstance"),
+    ]),
     Packet(name="ContainerOpen", id=176, fields=[
         Field(name="window_id", type="u8"),
         Field(name="container_type", type="u8"),
@@ -266,20 +266,20 @@ MINECRAFT_PACKETS = [
     Packet(name="ContainerClose", id=177, fields=[
         Field(name="window_id", type="u8"),
     ]),
-    # Packet(name="ContainerSetSlot", id=178, fields=[
-    #     Field(name="window_id", type="u8"),
-    #     Field(name="slot", type="u16"),
-    #     Field(name="item", type="ItemInstance"),
-    # ]),
+    Packet(name="ContainerSetSlot", id=178, fields=[
+        Field(name="window_id", type="u8"),
+        Field(name="slot", type="u16"),
+        Field(name="item", type="ItemInstance"),
+    ]),
     Packet(name="ContainerSetData", id=179, fields=[
         Field(name="window_id", type="u8"),
         Field(name="property", type="u16"),
         Field(name="value", type="u16"),
     ]),
-    # Packet(name="ContainerSetContent", id=180, fields=[
-    #     Field(name="window_id", type="u8"),
-    #     Field(name="items", type="ItemInstanceList"),
-    # ]),
+    Packet(name="ContainerSetContent", id=180, fields=[
+        Field(name="window_id", type="u8"),
+        Field(name="items", type="ItemInstanceList"),
+    ]),
     Packet(name="ContainerAck", id=181, fields=[
         Field(name="window_id", type="u8"),
         Field(name="unknown_first", type="u16"),
