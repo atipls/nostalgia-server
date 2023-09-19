@@ -1,7 +1,4 @@
-use crate::{
-    fragment::FragmentQueue,
-    {NetworkError, Result},
-};
+use crate::{fragment::FragmentQueue, NetworkError, Result};
 use byteorder::{BigEndian, LittleEndian, ReadBytesExt, WriteBytesExt};
 use std::{
     collections::{hash_map, HashMap},

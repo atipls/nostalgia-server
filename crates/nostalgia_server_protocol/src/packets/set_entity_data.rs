@@ -1,5 +1,4 @@
-use crate::interop::SyncedEntityData;
-use crate::{reader, writer};
+use crate::{interop::SyncedEntityData, reader, writer};
 use std::io::{Cursor, Result};
 
 #[derive(Clone, Debug)]

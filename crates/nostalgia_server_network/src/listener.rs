@@ -1,14 +1,10 @@
-use crate::{
-    peer::Peer,
-    protocol::*,
-    {NetworkError, Result},
-};
+use crate::{peer::Peer, protocol::*, NetworkError, Result};
 use std::{collections::HashMap, io::Cursor, net::SocketAddr, sync::Arc};
 use tokio::{
     net::UdpSocket,
     sync::{
         mpsc::{self, Receiver, Sender},
-        {Mutex, Notify, Semaphore},
+        Mutex, Notify, Semaphore,
     },
 };
 

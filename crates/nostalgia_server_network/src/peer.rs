@@ -1,19 +1,23 @@
-use crate::current_timestamp_milliseconds;
-use crate::protocol::ConnectedPacket;
-use crate::reliability::FrameVec;
 use crate::{
-    reliability::{Frame, RecvQueue, Reliability, SendQueue},
-    {NetworkError, Result},
+    current_timestamp_milliseconds,
+    protocol::ConnectedPacket,
+    reliability::{Frame, FrameVec, RecvQueue, Reliability, SendQueue},
+    NetworkError, Result,
 };
-use std::io::Cursor;
-use std::sync::atomic::{AtomicU64, Ordering};
-use std::time::Duration;
-use std::{net::SocketAddr, sync::Arc};
+use std::{
+    io::Cursor,
+    net::SocketAddr,
+    sync::{
+        atomic::{AtomicU64, Ordering},
+        Arc,
+    },
+    time::Duration,
+};
 use tokio::{
     net::UdpSocket,
     sync::{
         mpsc::{self, Receiver, Sender},
-        {Mutex, Notify, RwLock, Semaphore},
+        Mutex, Notify, RwLock, Semaphore,
     },
     time::sleep,
 };

@@ -1,15 +1,12 @@
 mod mesher;
 mod uv;
 
-use bevy::log::LogPlugin;
-use bevy::window::CursorGrabMode;
-use std::num::NonZeroU8;
-use std::path::PathBuf;
-use std::time::Duration;
+use bevy::{log::LogPlugin, window::CursorGrabMode};
+use std::{num::NonZeroU8, path::PathBuf, time::Duration};
 
-use bevy::pbr::wireframe::{WireframeConfig, WireframePlugin};
 use bevy::{
     diagnostic::{FrameTimeDiagnosticsPlugin, LogDiagnosticsPlugin},
+    pbr::wireframe::{WireframeConfig, WireframePlugin},
     prelude::*,
     render::{
         render_resource::{AddressMode, FilterMode, SamplerDescriptor},

@@ -1,9 +1,11 @@
-use bevy::prelude::*;
-use bevy::render::mesh::{Indices, PrimitiveTopology};
+use bevy::{
+    prelude::*,
+    render::mesh::{Indices, PrimitiveTopology},
+};
 
 use crate::uv::get_uv_coords_for_block_id;
-use block_mesh::ndshape::{ConstShape, ConstShape3u32};
 use block_mesh::{
+    ndshape::{ConstShape, ConstShape3u32},
     visible_block_faces, AxisPermutation, MergeVoxel, OrientedBlockFace, QuadCoordinateConfig,
     UnitQuadBuffer, Voxel, VoxelVisibility,
 };

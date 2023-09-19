@@ -1,10 +1,11 @@
-use network::{peer::Peer, reliability::Reliability, NetworkError};
-use protocol::interop::{EntityData, SyncedEntityData};
-use protocol::{Packet, *};
-use std::num::NonZeroU32;
-use std::{io::Cursor, sync::Arc, time::Duration};
-use tokio::sync::{mpsc::Sender, Mutex};
 use entity::entity_flags;
+use network::{peer::Peer, reliability::Reliability, NetworkError};
+use protocol::{
+    interop::{EntityData, SyncedEntityData},
+    Packet, *,
+};
+use std::{io::Cursor, num::NonZeroU32, sync::Arc, time::Duration};
+use tokio::sync::{mpsc::Sender, Mutex};
 use types::Vector3;
 use world::World;
 
@@ -16,8 +17,10 @@ pub struct Connection {
     world: Arc<Mutex<World>>,
     global_packet_sender: Arc<Mutex<Sender<(Option<NonZeroU32>, Packet)>>>,
     client_id: Option<NonZeroU32>,
+    entity_id: i32,
     connected: bool,
 
+    username: Option<String>,
     position: Vector3,
     entity_counter: i32,
 }
@@ -33,7 +36,10 @@ impl Connection {
             world,
             global_packet_sender,
             client_id: None,
+            entity_id: 0,
             connected: true,
+
+            username: None,
             position: Vector3::default(),
             entity_counter: 2,
         }
@@ -81,13 +87,15 @@ impl Connection {
                     pos: self.position,
                     radius: 5.0,
                     count: 16,
-                }).await?;
+                })
+                .await?;
             }
             Packet::UseItem(use_item) => {
                 self.send_packet(Message {
                     username: "Server".to_string(),
                     message: format!("Use item: {:?}", use_item),
-                }).await?;
+                })
+                .await?;
                 self.send_packet(UpdateBlock {
                     // entity_id: 1,
                     x: use_item.x - 1,
@@ -95,13 +103,15 @@ impl Connection {
                     y: use_item.y as u8,
                     block: 3,
                     meta: 0,
-                }).await?;
+                })
+                .await?;
                 self.send_packet(RemoveBlock {
                     entity_id: 1,
                     x: use_item.x + 1,
                     z: use_item.z,
                     y: use_item.y as u8,
-                }).await?;
+                })
+                .await?;
             }
             _ => {
                 println!("Unhandled packet: {:?}", minecraft_packet);
@@ -135,6 +145,7 @@ impl Connection {
         })
         .await?;
 
+        self.username = Some(login_request.username);
         self.client_id = Some(NonZeroU32::new(login_request.client_id).unwrap());
 
         Ok(())
@@ -178,8 +189,36 @@ impl Connection {
         self.connected
     }
 
-    pub fn disconnect(&mut self) {
+    pub async fn disconnect(&mut self) -> network::Result<()> {
         self.connected = false;
+
+        let Some(ref client_id) = self.client_id else {
+            return Ok(());
+        };
+
+        let Some(username) = self.username.clone() else {
+            return Ok(());
+        };
+
+        self.broadcast_packet(
+            true,
+            RemovePlayer {
+                entity_id: self.entity_id,
+                player_id: client_id.get() as u64,
+            },
+        )
+        .await?;
+
+        self.broadcast_packet(
+            true,
+            Message {
+                username: "server".to_string(),
+                message: format!("{} left the game", username),
+            },
+        )
+        .await?;
+
+        Ok(())
     }
 }
 

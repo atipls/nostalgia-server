@@ -1,5 +1,4 @@
-use crate::interop::RequestedChunk;
-use crate::{reader, writer};
+use crate::{interop::RequestedChunk, reader, writer};
 use std::io::{Cursor, Result};
 
 #[derive(Clone, Debug)]

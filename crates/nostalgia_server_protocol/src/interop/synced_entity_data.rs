@@ -1,7 +1,9 @@
 use crate::{reader, writer};
-use std::collections::HashMap;
-use std::fmt::Debug;
-use std::io::{Cursor, Result};
+use std::{
+    collections::HashMap,
+    fmt::Debug,
+    io::{Cursor, Result},
+};
 use types::{ItemInstance, Vector3};
 
 #[derive(Clone, Eq, Hash, PartialEq)]
