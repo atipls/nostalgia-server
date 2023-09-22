@@ -15,6 +15,7 @@ byteorder = "1.4.3"
 
 core.path = "crates/nostalgia_server_core"
 entity.path = "crates/nostalgia_server_entity"
+macros.path = "crates/nostalgia_server_macros"
 nbt.path = "crates/nostalgia_server_nbt"
 network.path = "crates/nostalgia_server_network"
 protocol.path = "crates/nostalgia_server_protocol"

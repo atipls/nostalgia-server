@@ -1,0 +1,13 @@
+[package]
+name = "macros"
+description = "Proc-macros for Nostalgia Server"
+license.workspace = true
+version.workspace = true
+edition.workspace = true
+
+[lib]
+proc-macro = true
+
+[dependencies]
+quote = "1.0.33"
+syn = "2.0.37"

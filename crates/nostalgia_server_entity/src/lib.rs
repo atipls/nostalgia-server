@@ -1,3 +1,5 @@
+use types::Vector3;
+
 pub mod id;
 pub mod mob;
 
@@ -11,9 +13,20 @@ pub mod entity_flags {
 pub type EntityFlags = u8;
 
 pub trait Entity {
-    fn spawn(&self);
-    fn despawn(&self);
-    fn update(&self);
+    fn entity_id() -> u8;
+    fn id(&self) -> i32;
+
+    fn flags(&self) -> EntityFlags;
+    fn position(&self) -> Vector3;
+    fn velocity(&self) -> Vector3;
+    fn on_ground(&self) -> bool;
+
+    fn pitch(&self) -> u8;
+    fn yaw(&self) -> u8;
+
+    fn spawn(&mut self);
+    fn despawn(&mut self);
+    fn update(&mut self);
 }
 
 pub trait LivingEntity: Entity {

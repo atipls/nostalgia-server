@@ -8,3 +8,4 @@ edition.workspace = true
 [dependencies]
 types.workspace = true
 protocol.workspace = true
+macros.workspace = true
