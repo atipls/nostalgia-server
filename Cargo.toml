@@ -1,5 +1,6 @@
 [workspace]
 members = ["crates/*"]
+# exclude = ["crates/nostalgia_server_renderer"]
 default-members = ["crates/nostalgia_server", "crates/nostalgia_server_renderer"]
 resolver = "2"
 
