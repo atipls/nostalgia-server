@@ -18,6 +18,11 @@ pub fn write_i16(cursor: &mut Cursor<Vec<u8>>, value: i16) -> Result<()> {
 }
 
 #[inline]
+pub fn write_i16_le(cursor: &mut Cursor<Vec<u8>>, value: i16) -> Result<()> {
+    cursor.write_i16::<LittleEndian>(value)
+}
+
+#[inline]
 pub fn write_u16(cursor: &mut Cursor<Vec<u8>>, value: u16) -> Result<()> {
     cursor.write_u16::<BigEndian>(value)
 }
@@ -35,6 +40,11 @@ pub fn write_u24(cursor: &mut Cursor<Vec<u8>>, value: u32) -> Result<()> {
 #[inline]
 pub fn write_i32(cursor: &mut Cursor<Vec<u8>>, value: i32) -> Result<()> {
     cursor.write_i32::<BigEndian>(value)
+}
+
+#[inline]
+pub fn write_i32_le(cursor: &mut Cursor<Vec<u8>>, value: i32) -> Result<()> {
+    cursor.write_i32::<LittleEndian>(value)
 }
 
 #[inline]

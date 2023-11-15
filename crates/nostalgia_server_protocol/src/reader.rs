@@ -18,6 +18,11 @@ pub fn read_i16(cursor: &mut Cursor<Vec<u8>>) -> Result<i16> {
 }
 
 #[inline]
+pub fn read_i16_le(cursor: &mut Cursor<Vec<u8>>) -> Result<i16> {
+    cursor.read_i16::<LittleEndian>()
+}
+
+#[inline]
 pub fn read_u16(cursor: &mut Cursor<Vec<u8>>) -> Result<u16> {
     cursor.read_u16::<BigEndian>()
 }
@@ -35,6 +40,11 @@ pub fn read_u24(cursor: &mut Cursor<Vec<u8>>) -> Result<u32> {
 #[inline]
 pub fn read_i32(cursor: &mut Cursor<Vec<u8>>) -> Result<i32> {
     cursor.read_i32::<BigEndian>()
+}
+
+#[inline]
+pub fn read_i32_le(cursor: &mut Cursor<Vec<u8>>) -> Result<i32> {
+    cursor.read_i32::<LittleEndian>()
 }
 
 #[inline]

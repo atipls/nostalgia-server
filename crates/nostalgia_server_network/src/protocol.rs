@@ -275,6 +275,40 @@ pub enum ConnectedPacket {
 }
 
 impl ConnectedPacket {
+    fn read_records(mut cursor: &mut Cursor<Vec<u8>>) -> Result<(u16, Vec<(u32, u32)>)> {
+        let length = cursor.read_u16::<BigEndian>()?;
+        let mut records = Vec::with_capacity(length as usize);
+        for _ in 0..length {
+            let start_same_as_end = cursor.read_u8()? == 1;
+            let start = cursor.read_u24::<LittleEndian>()?;
+            let end = if start_same_as_end {
+                start
+            } else {
+                cursor.read_u24::<LittleEndian>()?
+            };
+
+            records.push((start, end));
+        }
+
+        Ok((length, records))
+    }
+
+    fn write_records(
+        mut cursor: &mut Cursor<Vec<u8>>,
+        length: u16,
+        records: &[(u32, u32)],
+    ) -> Result<()> {
+        cursor.write_u16::<BigEndian>(length)?;
+        for (range_start, range_end) in records {
+            cursor.write_u8(if range_start == range_end { 0x01 } else { 0x00 })?;
+            cursor.write_u24::<LittleEndian>(*range_start)?;
+            if range_start != range_end {
+                cursor.write_u24::<LittleEndian>(*range_end)?;
+            }
+        }
+        Ok(())
+    }
+
     pub fn parse(mut cursor: &mut Cursor<Vec<u8>>) -> Result<Option<ConnectedPacket>> {
         Ok(match cursor.read_u8()? {
             0x00 => Some(ConnectedPacket::Ping {
@@ -327,37 +361,11 @@ impl ConnectedPacket {
             }
             0x15 => Some(ConnectedPacket::DisconnectionNotification),
             0xC0 => {
-                let length = cursor.read_u16::<BigEndian>()?;
-                let mut records = Vec::with_capacity(length as usize);
-                for _ in 0..length {
-                    let start_same_as_end = cursor.read_u8()? == 1;
-                    let start = cursor.read_u24::<LittleEndian>()?;
-                    let end = if start_same_as_end {
-                        start
-                    } else {
-                        cursor.read_u24::<LittleEndian>()?
-                    };
-
-                    records.push((start, end));
-                }
-
+                let (length, records) = ConnectedPacket::read_records(&mut cursor)?;
                 Some(ConnectedPacket::Acknowledge { length, records })
             }
             0xA0 => {
-                let length = cursor.read_u16::<BigEndian>()?;
-                let mut records = Vec::with_capacity(length as usize);
-                for _ in 0..length {
-                    let start_same_as_end = cursor.read_u8()? == 1;
-                    let start = cursor.read_u24::<LittleEndian>()?;
-                    let end = if start_same_as_end {
-                        start
-                    } else {
-                        cursor.read_u24::<LittleEndian>()?
-                    };
-
-                    records.push((start, end));
-                }
-
+                let (length, records) = ConnectedPacket::read_records(&mut cursor)?;
                 Some(ConnectedPacket::NegativeAcknowledge { length, records })
             }
             _ => None,
@@ -435,25 +443,11 @@ impl ConnectedPacket {
             }
             ConnectedPacket::Acknowledge { length, records } => {
                 cursor.write_u8(0xC0)?;
-                cursor.write_u16::<BigEndian>(*length)?;
-                for (range_start, range_end) in records {
-                    cursor.write_u8(if range_start == range_end { 0x01 } else { 0x00 })?;
-                    cursor.write_u24::<LittleEndian>(*range_start)?;
-                    if range_start != range_end {
-                        cursor.write_u24::<LittleEndian>(*range_end)?;
-                    }
-                }
+                ConnectedPacket::write_records(&mut cursor, *length, records)?;
             }
             ConnectedPacket::NegativeAcknowledge { length, records } => {
                 cursor.write_u8(0xA0)?;
-                cursor.write_u16::<BigEndian>(*length)?;
-                for (range_start, range_end) in records {
-                    cursor.write_u8(if range_start == range_end { 0x01 } else { 0x00 })?;
-                    cursor.write_u24::<LittleEndian>(*range_start)?;
-                    if range_start != range_end {
-                        cursor.write_u24::<LittleEndian>(*range_end)?;
-                    }
-                }
+                ConnectedPacket::write_records(&mut cursor, *length, records)?;
             }
         }
         Ok(())

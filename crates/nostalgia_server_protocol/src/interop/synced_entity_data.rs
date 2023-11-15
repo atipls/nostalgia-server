@@ -130,7 +130,7 @@ impl SyncedEntityData {
             let item_type = maybe_index_and_type >> 5;
             let value = match item_type {
                 0 => EntityData::Byte(reader::read_i8(&mut cursor)?),
-                1 => EntityData::Short(reader::read_i16(&mut cursor)?),
+                1 => EntityData::Short(reader::read_i16_le(&mut cursor)?),
                 2 => EntityData::Int(reader::read_i32(&mut cursor)?),
                 3 => EntityData::Float(reader::read_f32(&mut cursor)?),
                 4 => EntityData::String(reader::read_string(&mut cursor)?),
@@ -165,7 +165,7 @@ impl SyncedEntityData {
 
             match value {
                 EntityData::Byte(value) => writer::write_i8(&mut cursor, *value)?,
-                EntityData::Short(value) => writer::write_i16(&mut cursor, *value)?,
+                EntityData::Short(value) => writer::write_i16_le(&mut cursor, *value)?,
                 EntityData::Int(value) => writer::write_i32(&mut cursor, *value)?,
                 EntityData::Float(value) => writer::write_f32(&mut cursor, *value)?,
                 EntityData::String(value) => writer::write_string(&mut cursor, value)?,

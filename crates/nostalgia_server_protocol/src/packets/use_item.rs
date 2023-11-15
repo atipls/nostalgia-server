@@ -22,7 +22,7 @@ impl UseItem {
             z: reader::read_i32(&mut cursor)?,
             block: reader::read_u16(&mut cursor)?,
             meta: reader::read_u8(&mut cursor)?,
-            id: reader::read_i32(&mut cursor)?,
+            id: reader::read_i32_le(&mut cursor)?,
             f_pos: reader::read_vector3(&mut cursor)?,
             pos: reader::read_vector3(&mut cursor)?,
         })

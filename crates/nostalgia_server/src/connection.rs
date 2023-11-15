@@ -63,26 +63,10 @@ impl Connection {
             Packet::LoginRequest(login_request) => self.handle_login_request(login_request).await?,
             Packet::Message(message) => self.broadcast_packet(false, message.clone()).await?,
             Packet::MovePlayer(move_player) => {
-                self.broadcast_packet(true, move_player.clone()).await?;
                 self.position = move_player.pos;
-                let mut base_chicken_metadata = SyncedEntityData::from(&[
-                    (1, EntityData::Short(11265)),
-                    (14, EntityData::Byte(0)),
-                    (0, EntityData::Byte(entity_flags::ON_FIRE as i8)),
-                ]);
-
-                self.send_packet(AddMob {
-                    entity_id: self.entity_counter,
-                    entity_type: 10,
-                    pos: move_player.pos,
-                    yaw: 199,
-                    pitch: 0,
-                    metadata: base_chicken_metadata,
-                })
-                .await?;
-                self.entity_counter += 1;
-            }
-            Packet::Animate(animate) => {
+                self.broadcast_packet(true, move_player.clone()).await?
+            },
+            Packet::Animate(_animate) => {
                 self.send_packet(Explode {
                     pos: self.position,
                     radius: 5.0,
@@ -118,6 +102,26 @@ impl Connection {
             }
         }
 
+        Ok(())
+    }
+
+    async fn spawn_chicken(&mut self, pos: Vector3) -> network::Result<()> {
+        let base_chicken_metadata = SyncedEntityData::from(&[
+            (1, EntityData::Short(11265)),
+            (14, EntityData::Byte(0)),
+            (0, EntityData::Byte(entity_flags::ON_FIRE as i8)),
+        ]);
+
+        self.send_packet(AddMob {
+            entity_id: self.entity_counter,
+            entity_type: 10,
+            pos,
+            yaw: 199,
+            pitch: 0,
+            metadata: base_chicken_metadata,
+        })
+        .await?;
+        self.entity_counter += 1;
         Ok(())
     }
 

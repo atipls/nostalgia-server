@@ -136,7 +136,7 @@ fn update_texture_atlas_repeat(
         match event {
             AssetEvent::Created { handle } => {
                 if *handle == texture_atlas_image.0 {
-                    let mut texture = textures.get_mut(&texture_atlas_image.0).unwrap();
+                    let texture = textures.get_mut(&texture_atlas_image.0).unwrap();
                     texture.sampler_descriptor = ImageSampler::Descriptor(SamplerDescriptor {
                         address_mode_u: AddressMode::Repeat,
                         address_mode_v: AddressMode::Repeat,

@@ -1,10 +1,11 @@
+#[allow(dead_code)]
+
 mod connection;
 
 use connection::Connection;
 use network::{listener::Listener, protocol::ConnectedPacket, reliability::FrameVec, NetworkError};
 use protocol::Packet;
 use std::{
-    arch::{aarch64, is_aarch64_feature_detected},
     num::NonZeroU32,
     path::PathBuf,
     sync::Arc,
